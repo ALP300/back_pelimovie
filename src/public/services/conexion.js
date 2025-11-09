@@ -21,3 +21,19 @@ export async function getConexion(){
         return null;
     }
 }
+
+export async function ConsultarProductos() {
+    const cliente = new Client(config);
+    try {
+        await cliente.connect();
+        console.log('Executing query: SELECT * FROM products');
+        const resultado = await cliente.query('SELECT * FROM products');
+        console.log('Productos consultados:', resultado.rows);
+        return resultado.rows;
+    } catch (error) {
+        console.error('Error al consultar productos:', error);
+        throw error; 
+    } finally {
+        await cliente.end();
+    }
+}
