@@ -3,9 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PeliMovie - Home</title>
+    <%- include('partials/head') %>
+    <style>
+        :root {
+            --primary-color: #ff4444;
+            --accent-color: #00ff88;
+            --bg-dark: #1a1a1a;
+            --bg-darker: #111111;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                        url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-dark), transparent);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(255,0,0,0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(255,0,0,0.3);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(255,0,0,0.6), 0 0 30px rgba(255,0,0,0.4);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, var(--primary-color), #ff8800);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,68,68,0.4);
+        }
+
+        .features {
+            padding: 4rem 2rem;
+            background-color: var(--bg-darker);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, #2a2a2a, #222);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), #ff8800);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .feature-description {
+            color: #ddd;
+            line-height: 1.6;
+        }
+
+        .spotlight {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .spotlight-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .spotlight-text {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #ddd;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello World</h1>
+    <%- include('partials/navigation') %>
+    
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">PeliMovie</h1>
+            <p class="hero-subtitle">Descubre nuestra increíble selección de productos</p>
+            <a href="/cartelera" class="cta-button">Ver Cartelera</a>
+        </div>
+    </div>
+
+    <section class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎬</div>
+                <h3 class="feature-title">Productos Premium</h3>
+                <p class="feature-description">Descubre nuestra selección de productos de alta calidad cuidadosamente seleccionados para ti.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌟</div>
+                <h3 class="feature-title">Ofertas Especiales</h3>
+                <p class="feature-description">Aprovecha nuestras ofertas exclusivas y descuentos especiales en productos seleccionados.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3 class="feature-title">Envío Rápido</h3>
+                <p class="feature-description">Entrega rápida y segura para que disfrutes de tus productos lo antes posible.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="spotlight">
+        <h2 class="spotlight-title">Bienvenido a PeliMovie</h2>
+        <p class="spotlight-text">
+            En PeliMovie, nos dedicamos a ofrecerte la mejor experiencia de compra con productos de alta calidad.
+            Nuestra selección está cuidadosamente curada para satisfacer tus necesidades y superar tus expectativas.
+            ¡Explora nuestra cartelera de productos y encuentra exactamente lo que estás buscando!
+        </p>
+    </section>
+
+    <script>
+        // Add smooth scroll behavior for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>

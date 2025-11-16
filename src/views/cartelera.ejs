@@ -3,9 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Cartelera - PeliMovie</title>
+    <%- include('partials/head') %>
+    <style>
+        .cinema-container {
+            background-color: #1a1a1a;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .movie-card {
+            background: linear-gradient(145deg, #2a2a2a, #222);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff0000, #ff8800);
+        }
+        .movie-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff4444;
+        }
+        .movie-info {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            color: #ddd;
+        }
+        .movie-price {
+            font-size: 1.8rem;
+            color: #00ff88;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            padding: 2rem;
+        }
+        .page-title {
+            color: white;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.3);
+        }
+        .stock-badge {
+            background-color: #ff4444;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>Cartelera</h1>
+    <%- include('partials/navigation') %>
+    
+    <div class="cinema-container">
+        <h1 class="page-title">🎬 Cartelera de Productos 🎬</h1>
+        <div id="loading" class="loading">Cargando productos...</div>
+        <div id="movieGrid" class="movie-grid"></div>
+    </div>
+
+    <script>
+        async function fetchProducts() {
+            try {
+                const apiUrl = '/api/get-productos';
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                const movieGrid = document.getElementById('movieGrid');
+                const loading = document.getElementById('loading');
+                
+                loading.style.display = 'none';
+                
+                if (!Array.isArray(data)) {
+                    throw new Error('Data received is not an array');
+                }
+                
+                data.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'movie-card';
+                    
+                    const date = new Date(product.created_at).toLocaleDateString();
+                    
+                    card.innerHTML = `
+                        <div class="stock-badge">Stock: ${product.stock_quantity}</div>
+                        <h2 class="movie-title">${product.product_name}</h2>
+                        <p class="movie-info">Categoría: ${product.category}</p>
+                        <p class="movie-price">$${product.price}</p>
+                        <p class="movie-info">ID: ${product.product_id}</p>
+                        <p class="movie-info">Fecha: ${date}</p>
+                    `;
+                    
+                    movieGrid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                const loading = document.getElementById('loading');
+                loading.innerHTML = 'Error al cargar los productos. Por favor, intente más tarde.';
+            }
+        }
+
+        // Execute when the page loads
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+    </script>
+</body>
+</html>
+                
+             
+    </script>
 </body>
 </html>

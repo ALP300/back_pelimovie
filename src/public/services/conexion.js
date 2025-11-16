@@ -37,3 +37,20 @@ export async function ConsultarProductos() {
         await cliente.end();
     }
 }
+
+export async function crearUsuario(correo, contrasena) {
+    const cliente = new Client(config);
+    try {
+        await cliente.connect();
+        const query = 'INSERT INTO usuarios(correo, contrasena) VALUES($1, $2) RETURNING id, correo, fecha_creacion';
+        const values = [correo, contrasena];
+        const resultado = await cliente.query(query, values);
+        console.log('Usuario creado:', resultado.rows[0]);
+        return resultado.rows[0];
+    } catch (error) {
+        console.error('Error al crear usuario:', error);
+        throw error;
+    } finally {
+        await cliente.end();
+    }
+}
