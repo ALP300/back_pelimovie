@@ -81,6 +81,18 @@
             top: 1rem;
             right: 1rem;
         }
+        .btn-delete {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -121,6 +133,7 @@
                         <p class="movie-price">$${product.price}</p>
                         <p class="movie-info">ID: ${product.product_id}</p>
                         <p class="movie-info">Fecha: ${date}</p>
+                        <button class="btn-delete" data-id="${product.product_id}">Eliminar</button>
                     `;
                     
                     movieGrid.appendChild(card);
@@ -132,8 +145,45 @@
             }
         }
 
+        async function handleDelete(event) {
+            // Solo actuar si se hizo clic en un botón de eliminar
+            if (!event.target.classList.contains('btn-delete')) {
+                return;
+            }
+
+            const button = event.target;
+            const productId = button.dataset.id;
+
+            // Pedir confirmación al usuario
+            if (!confirm(`¿Estás seguro de que quieres eliminar el producto con ID ${productId}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/productos/${productId}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Eliminar la tarjeta del producto de la vista
+                    button.closest('.movie-card').remove();
+                    alert(data.message); // 'Producto eliminado exitosamente.'
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Error al intentar eliminar el producto:', error);
+                alert('No se pudo conectar con el servidor para eliminar el producto.');
+            }
+        }
+
         // Execute when the page loads
-        document.addEventListener('DOMContentLoaded', fetchProducts);
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchProducts();
+            // Añadir el listener para los clics en los botones de eliminar
+            document.getElementById('movieGrid').addEventListener('click', handleDelete);
+        });
     </script>
 </body>
 </html>

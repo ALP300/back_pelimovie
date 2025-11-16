@@ -70,18 +70,55 @@
     <div class="login-container">
         <div class="login-form">
             <h1 class="form-title">Iniciar Sesión</h1>
-            <form>
+            <form id="login-form">
+                <div id="error-message" class="alert alert-danger" style="display: none;"></div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Correo Electrónico</label>
-                    <input type="email" class="form-control" id="email" required>
+                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" required>
+                    <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-login">Ingresar</button>
             </form>
         </div>
     </div>
+
+    <script>
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Evita que el formulario se envíe de la forma tradicional
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Si el login es exitoso, redirigir al catálogo
+                    window.location.href = '/cartelera';
+                } else {
+                    // Mostrar mensaje de error
+                    errorMessage.textContent = data.error || 'Ocurrió un error.';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'No se pudo conectar con el servidor.';
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>
